@@ -191,6 +191,8 @@ h1 {
 .mini-timeline {
   padding: 16px 20px 0;
   border-bottom: 1px solid #edf1f7;
+  position: relative;
+  z-index: 10;
 }
 .mini-timeline-canvas {
   position: relative;
@@ -223,10 +225,12 @@ h1 {
   max-width: 220px;
   padding: 9px 12px;
   border-radius: var(--radius-sm);
-  background: var(--ink);
-  color: #fff;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
   pointer-events: none;
-  z-index: 20;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -239,26 +243,27 @@ h1 {
   left: 50%;
   transform: translateX(-50%);
   border: 5px solid transparent;
-  border-top-color: var(--ink);
+  border-top-color: var(--line);
 }
 .mini-popup-label {
   font-size: .82rem;
   font-weight: 700;
   line-height: 1.3;
   white-space: normal;
+  color: var(--ink);
 }
 .mini-popup-meta {
   font-size: .72rem;
-  color: #a8bcd4;
+  color: var(--accent);
   font-weight: 600;
 }
 .mini-popup-sources {
   font-size: .7rem;
-  color: #7a9ab8;
+  color: var(--muted);
 }
 .mini-popup-time {
   font-size: .68rem;
-  color: #6a8aaa;
+  color: #9aaabb;
   margin-top: 2px;
 }
 @keyframes popup-in {
