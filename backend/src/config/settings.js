@@ -10,7 +10,7 @@ function createSettings() {
   const workingDirectory = process.cwd();
   return {
     port: Number(process.env.PORT || 4000),
-    corsOrigin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    corsOrigin: (process.env.CORS_ORIGIN || "http://localhost:3000").split(",").map((s) => s.trim()),
     mongodbUri: requiredEnvironment("MONGODB_URI"),
     mongodbDatabase: process.env.MONGODB_DATABASE || "news_pulse",
     pythonPath: process.env.PYTHON_PATH || "python",
