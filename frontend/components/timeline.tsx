@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { formatDate, layoutTimeline } from "../lib/timeline";
+import { formatDate, layoutTimeline, PositionedCluster } from "../lib/timeline";
 import { TimelineCluster } from "../lib/types";
 
 type SortOrder = "newest" | "oldest" | "largest";
@@ -22,10 +22,18 @@ function getSourceColor(source: string) {
   return SOURCE_COLORS[source] ?? "#5d6c81";
 }
 
+type PopupInfo = { cluster: PositionedCluster; x: number };
+
 function MiniTimeline({ clusters }: { clusters: TimelineCluster[] }) {
   const positioned = layoutTimeline(clusters);
+  const [popup, setPopup] = useState<PopupInfo | null>(null);
   if (!positioned.length) return null;
+
   const laneCount = Math.max(...positioned.map((c) => c.lane)) + 1;
+  const earliest = Math.min(...positioned.map((c) => c.startMs));
+  const latest = Math.max(...positioned.map((c) => c.endMs));
+  const fmtAxis = (ms: number) =>
+    new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(ms));
 
   return (
     <div className="mini-timeline" aria-hidden="true">
@@ -43,13 +51,29 @@ function MiniTimeline({ clusters }: { clusters: TimelineCluster[] }) {
               top: `${6 + cluster.lane * 18}px`,
               opacity: 0.55 + cluster.intensity * 0.09,
             }}
-            title={cluster.label}
+            onMouseEnter={(e) => {
+              const rect = (e.currentTarget.closest(".mini-timeline-canvas") as HTMLElement).getBoundingClientRect();
+              const barRect = e.currentTarget.getBoundingClientRect();
+              setPopup({ cluster, x: barRect.left + barRect.width / 2 - rect.left });
+            }}
+            onMouseLeave={() => setPopup(null)}
           />
         ))}
+        {popup && (
+          <div
+            className="mini-popup"
+            style={{ left: `${popup.x}px` }}
+          >
+            <span className="mini-popup-label">{popup.cluster.label}</span>
+            <span className="mini-popup-meta">{popup.cluster.articleCount} articles</span>
+            <span className="mini-popup-sources">{popup.cluster.sources.join(" · ")}</span>
+            <span className="mini-popup-time">{fmtAxis(popup.cluster.startMs)}</span>
+          </div>
+        )}
       </div>
       <div className="mini-timeline-labels">
-        <span>Earlier</span>
-        <span>Later</span>
+        <span>{fmtAxis(earliest)}</span>
+        <span>{fmtAxis(latest)}</span>
       </div>
     </div>
   );
