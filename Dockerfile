@@ -7,8 +7,7 @@ COPY backend/package.json backend/package-lock.json ./backend/
 RUN cd backend && npm ci --omit=dev
 
 # ── Python virtual environment ────────────────────────────────────────────────
-# A venv avoids PEP 668 "externally managed environment" errors on Debian
-# Bookworm and keeps scraper dependencies isolated from the system Python.
+RUN apt-get update && apt-get install -y python3-venv && rm -rf /var/lib/apt/lists/*
 COPY scraper/requirements.txt ./scraper/
 RUN python3 -m venv /app/.venv \
  && /app/.venv/bin/pip install --no-cache-dir -r scraper/requirements.txt
