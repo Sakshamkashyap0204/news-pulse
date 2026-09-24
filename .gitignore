@@ -1,0 +1,27 @@
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+!.env.local.example
+
+# JavaScript dependencies and build output
+node_modules/
+.next/
+dist/
+coverage/
+
+# Python environments, caches, and test output
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs and editor files
+*.log
+.DS_Store
+.vscode/
+!.vscode/extensions.json
+
