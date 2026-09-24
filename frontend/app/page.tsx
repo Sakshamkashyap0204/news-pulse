@@ -113,7 +113,7 @@ export default function HomePage() {
       )}
 
       {loading && (
-        <section className="empty-state">
+        <section className="loading-state">
           <h2>Loading timeline…</h2>
           <p>Fetching the latest stored topic clusters.</p>
         </section>
